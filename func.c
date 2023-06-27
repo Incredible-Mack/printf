@@ -32,23 +32,36 @@ return (*characterCount);
 }
 
 /**
- * _decimal - handle  decimal d and i
+ * handle_decimal - handle  decimal d and i
  * @num: checks for positive or negative num
  * @characterCount: this a pointer
  * Return:  count on success
  */
-int _decimal(int num, int *characterCount)
+
+int handle_decimal(int num, int *characterCount)
 {
-int count = 0; /*counting */
+int digitCount = 0;
+int digit;
 if (num < 0)
 {
-count = handle_char('-', characterCount);
+*characterCount = handle_char('-', characterCount);
 num = -num;
 }
-if (num >= 10)
+
+if (num == 0)
 {
-count += _decimal(num / 10, characterCount);
+digitCount++;
+*characterCount = handle_char('0', characterCount);
 }
-count += handle_char('0' + num % 10, characterCount);
-return (count);
+else
+{
+while (num > 0)
+{
+digitCount++;
+digit = num % 10;
+*characterCount = handle_char('0' + digit, characterCount);
+num /= 10;
+}
+}
+return (digitCount);
 }

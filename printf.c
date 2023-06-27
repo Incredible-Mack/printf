@@ -7,60 +7,42 @@
  */
 
 
-int _printf(const char *format, ...)
+int _printf(const char *format, ...) /*handling format*/
 {
 int characterCount = 0;
-int digitCount = 0;
 va_list args;
 va_start(args, format);
-
 
 while (*format != '\0')
 {
 if (*format == '%')
 {
 format++;
-
-if (*format == 'c')
+if (*format == '%')
 {
-char c = (char)va_arg(args, int);
-putchar(c);
-characterCount++;
+characterCount = handle_char('%', &characterCount);
+}
+else if (*format == 'c')
+{
+char c = va_arg(args, int);
+characterCount = handle_char(c, &characterCount);
 }
 else if (*format == 's')
 {
-char *s = va_arg(args, char *);
-while (*s != '\0')
-{
-putchar(*s);
-s++;
-characterCount++;
-}
+char *s = va_arg(args, char *); /*check for s*/
+characterCount = handle_string(s, &characterCount);
 }
 else if (*format == 'd' || *format == 'i')
 {
 int num = va_arg(args, int);
-printf("%d", num);
-
-if (num < 0)
-{
-digitCount = 1; /* Account for the '-' sign*/
-num = -num;
-}
-while (num != 0)
-{
-digitCount++;
-num /= 10;
-}
+int digitCount = handle_decimal(num, &characterCount);
 characterCount += digitCount;
 }
 }
 else
 {
-putchar(*format);
-characterCount++;
+characterCount = handle_char(*format, &characterCount);
 }
-
 format++;
 }
 

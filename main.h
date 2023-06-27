@@ -8,6 +8,6 @@
 int handle_char(char c, int *characterCount);
 int handle_string(char *s, int *characterCount);
 int _printf(const char *format, ...);
-int _decimal(int num, int *characterCount);
+int handle_decimal(int num, int *characterCount);
 
 #endif
