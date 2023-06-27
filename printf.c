@@ -19,33 +19,24 @@ while (*format != '\0')
 if (*format == '%')
 {
 format++;
-if (*format == 'c')
+if (*format == '%') /*checking for % conversion */
 {
-char c = va_arg(args, int); /*getting c and int */
-putchar(c);
-characterCount++;
+characterCount = handle_char('%', &characterCount);
+}
+else if (*format == 'c')
+{
+char c = va_arg(args, int);
+characterCount = handle_char(c, &characterCount);
 }
 else if (*format == 's')
 {
 char *s = va_arg(args, char *);
-while (*s != '\0')
-{
-putchar(*s);
-s++;
-characterCount++;
-}
-}
-else if (*format == 'd' || *format == 'i')
-{
-int num = va_arg(args, int);
-printf("%d", num);
-characterCount++;
+characterCount = handle_string(s, &characterCount);
 }
 }
 else
 {
-putchar(*format);
-characterCount++;
+characterCount = handle_char(*format, &characterCount);
 }
 format++;
 }
