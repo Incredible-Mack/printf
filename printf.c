@@ -13,7 +13,7 @@ int characterCount = 0;
 va_list args;
 va_start(args, format);
 
-while (*format != '\0')
+while (*format != '\0') /*while not zero*/
 {
 if (*format == '%')
 {
@@ -29,13 +29,31 @@ characterCount = handle_char(c, &characterCount);
 }
 else if (*format == 's')
 {
-char *s = va_arg(args, char *); /*check for s*/
+char *s = va_arg(args, char *);
 characterCount = handle_string(s, &characterCount);
 }
 else if (*format == 'd' || *format == 'i')
 {
 int num = va_arg(args, int);
-int digitCount = handle_decimal(num, &characterCount);
+int digitCount = 0;
+if (num < 0)
+{
+characterCount = handle_char('-', &characterCount);
+num = -num;
+digitCount++;
+}
+if (num == 0)
+{
+characterCount = handle_char('0', &characterCount);
+digitCount++;
+}
+while (num > 0)
+{
+int digit = num % 10;
+characterCount = handle_char('0' + digit, &characterCount);
+num /= 10;
+digitCount++;
+}
 characterCount += digitCount;
 }
 }
@@ -50,3 +68,4 @@ va_end(args);
 
 return (characterCount);
 }
+
